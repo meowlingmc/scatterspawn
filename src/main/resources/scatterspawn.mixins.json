@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.saschat.scatterspawn.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "respawn.MinecraftServerMixin",
+    "respawn.PlayerListMixin",
+    "respawn.ServerPlayerMixin",
+    "respawn.SetWorldSpawnCommandMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

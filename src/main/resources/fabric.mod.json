@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "scatterspawn",
+  "version": "${version}",
+  "name": "ScatterSpawn",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.coScatterSpawn/Sascha-T/laetus"
+  },
+  "license": "MIT",
+  "icon": "assets/scatterspawn/icon.png",
+  "environment": "server",
+  "entrypoints": {
+    "server": [
+      "de.saschat.scatterspawn.ScatterSpawn"
+    ],
+    "scatterspawn:register": [
+      "de.saschat.scatterspawn.ScatterSpawn"
+    ]
+  },
+  "mixins": [
+    "scatterspawn.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
