@@ -44,11 +44,6 @@ public abstract class ServerPlayerMixin extends Player implements ServerPlayerDu
         if(ScatterSpawn.INSTANCE.isRespawning(getUUID())) {
             lastScatter = ScatterSpawn.INSTANCE.getSpawnLocation((ServerPlayer) (Object) this);
 
-            System.out.println("Last scatter:");
-            System.out.println("- "+lastScatter.position().x);
-            System.out.println("- "+lastScatter.position().y);
-            System.out.println("- "+lastScatter.position().z);
-
             setPos(lastScatter.position());
             if (lastScatter.level() != null)
                 setLevel(server.getLevel(lastScatter.level()));
