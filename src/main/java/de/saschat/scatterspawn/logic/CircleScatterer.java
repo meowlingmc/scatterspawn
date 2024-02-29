@@ -49,6 +49,8 @@ public class CircleScatterer implements Scatterer {
         // :p
         int iteration = 0;
         search: while (true) {
+            iteration++;
+
             angle = random.nextFloat(0, 360);
             if(maximumLength > minimumLength)
                 distance = random.nextInt(minimumLength, maximumLength);
@@ -81,7 +83,6 @@ public class CircleScatterer implements Scatterer {
 
             if(minDist > minimumDistance || minimumDistance < 0)
                 break;
-            iteration++;
         }
 
         playerConfig.add("lastX", new JsonPrimitive(x));
