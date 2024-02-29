@@ -1,4 +1,4 @@
-package de.saschat.scatterspawn.mixin.respawn;
+package de.saschat.scatterspawn.mixin;
 
 import de.saschat.scatterspawn.ScatterSpawn;
 import net.minecraft.core.BlockPos;

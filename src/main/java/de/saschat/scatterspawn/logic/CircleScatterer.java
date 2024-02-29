@@ -4,8 +4,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import de.saschat.scatterspawn.ScatterSpawn;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -30,6 +33,8 @@ public class CircleScatterer implements Scatterer {
                 playerConfig.get("lastZ").getAsFloat()
             ));
         }
+        String[] bannedBiomes = Objects.requireNonNullElse(scatterConfig.get("bannedBiomes"), new JsonPrimitive("minecraft:ocean")).getAsString().split(",");
+
         // generate new position!
         double originX = Objects.requireNonNullElse(scatterConfig.get("originX"), new JsonPrimitive(0.0f)).getAsDouble();
         double originZ = Objects.requireNonNullElse(scatterConfig.get("originZ"), new JsonPrimitive(0.0f)).getAsDouble();
@@ -43,7 +48,7 @@ public class CircleScatterer implements Scatterer {
         Random random = new Random(player.getUUID().getLeastSignificantBits() ^ player.getUUID().getMostSignificantBits());
         // :p
         int iteration = 0;
-        while (true) {
+        search: while (true) {
             angle = random.nextFloat(0, 360);
             if(maximumLength > minimumLength)
                 distance = random.nextInt(minimumLength, maximumLength);
@@ -65,8 +70,16 @@ public class CircleScatterer implements Scatterer {
                     Math.pow(lastX - x, 2) + Math.pow(lastZ - z, 2)
                 ), minDist);
             }
+            if (iteration > 200)
+                break;
 
-            if (minDist > minimumDistance || iteration > 200 || minimumDistance < 0)
+            Holder<Biome> biome = player.level().getBiome(new BlockPos((int) x, (int) scatterY, (int) z));
+            for (String s : bannedBiomes)
+                if(biome.is(new ResourceLocation(s)))
+                    continue search;
+
+
+            if(minDist > minimumDistance || minimumDistance < 0)
                 break;
             iteration++;
         }
@@ -84,7 +97,7 @@ public class CircleScatterer implements Scatterer {
 
     @Override
     public List<String> scattererConfigNames() {
-        return List.of("spawnY", "originX", "originY", "minimumLength", "maximumLength", "minimumDistance");
+        return List.of("spawnY", "originX", "originY", "minimumLength", "maximumLength", "minimumDistance", "bannedBiomes");
     }
 
     @Override

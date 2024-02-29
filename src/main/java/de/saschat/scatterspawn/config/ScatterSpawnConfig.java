@@ -6,14 +6,15 @@ import com.google.gson.InstanceCreator;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import de.saschat.scatterspawn.ScatterSpawn;
-import de.saschat.scatterspawn.logic.Scatterer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.Objects;
 
+// @todo: make code look nice instead of "just" working
 public class ScatterSpawnConfig {
     static {
        FabricLoader.getInstance().getConfigDir().toFile().mkdirs();
@@ -26,6 +27,11 @@ public class ScatterSpawnConfig {
         try {
             FileWriter writer = new FileWriter(FILE);
             GSON.toJson(this, writer);
+            writer.flush();
+            writer.close();
+
+            writer = new FileWriter(new File(FabricLoader.getInstance().getConfigDir().toFile(), getPlayerPath()));
+            GSON.toJson(scattererPlayerConfigsCache, writer);
             writer.flush();
             writer.close();
         } catch (Exception ex) {
@@ -55,7 +61,7 @@ public class ScatterSpawnConfig {
     public void setScatterer(ResourceLocation location) {
         if(!scatterer.equals(location.toString())) {
             scattererConfig = new JsonObject();
-            scattererPlayerConfigs = new JsonObject();
+            scattererPlayerConfigsCache = new JsonObject();
         }
         scatterer = location.toString();
         dirty();
@@ -65,7 +71,8 @@ public class ScatterSpawnConfig {
     private JsonObject scattererConfig = new JsonObject();
 
     @Expose
-    private JsonObject scattererPlayerConfigs = new JsonObject();
+    private String scattererPlayerConfigPath;
+    private JsonObject scattererPlayerConfigsCache = new JsonObject();
 
     public JsonObject getScattererConfig() {
         JsonObject ret;
@@ -76,10 +83,25 @@ public class ScatterSpawnConfig {
     }
 
     public JsonObject getScattererPlayerConfigs() {
-        JsonObject ret;
-        if((ret = scattererPlayerConfigs) != null)
-            return ret;
-        scattererPlayerConfigs = new JsonObject();
-        return scattererPlayerConfigs;
+        scattererPlayerConfigPath = getPlayerPath();
+        dirty();
+
+        if(scattererPlayerConfigsCache != null)
+            return scattererPlayerConfigsCache;
+        File readFile = new File(scattererPlayerConfigPath);
+        if(!readFile.exists())
+            return scattererPlayerConfigsCache;
+        try {
+            FileReader reader = new FileReader(FILE);
+            scattererPlayerConfigsCache = GSON.fromJson(reader, JsonObject.class);
+            reader.close();
+        } catch (Exception ex) {}
+        if(scattererPlayerConfigsCache == null)
+            scattererPlayerConfigsCache = new JsonObject();
+        return scattererPlayerConfigsCache;
+    }
+
+    private String getPlayerPath() {
+        return Objects.requireNonNullElse(scattererPlayerConfigPath, "scatterspawn-players.json");
     }
 }

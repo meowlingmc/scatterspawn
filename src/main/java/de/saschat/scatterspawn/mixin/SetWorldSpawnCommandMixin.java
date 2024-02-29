@@ -1,4 +1,4 @@
-package de.saschat.scatterspawn.mixin.respawn;
+package de.saschat.scatterspawn.mixin;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
