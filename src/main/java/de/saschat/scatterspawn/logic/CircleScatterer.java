@@ -76,8 +76,9 @@ public class CircleScatterer implements Scatterer {
                 break;
 
             Holder<Biome> biome = player.level().getBiome(new BlockPos((int) x, (int) scatterY, (int) z));
+            System.out.println("Trying for " + biome.unwrapKey().get().location());
             for (String s : bannedBiomes)
-                if(biome.is(new ResourceLocation(s)))
+                if(biome.unwrapKey().get().location().toString().equals(s))
                     continue search;
 
 
