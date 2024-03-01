@@ -21,7 +21,7 @@ public class MinecraftServerMixin {
      */
     @Overwrite
     private static void setInitialSpawn(ServerLevel serverLevel, ServerLevelData serverLevelData, boolean bl, boolean bl2) {
-        serverLevelData.setSpawn(new BlockPos((int) 29e6, (int) 0, (int) 29e6), 0.0f);
+        serverLevelData.setSpawn(new BlockPos((int) 0, (int) 0, (int) 0), 0.0f);
     }
 
     @Redirect(method = "prepareLevels", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerChunkCache;addRegionTicket(Lnet/minecraft/server/level/TicketType;Lnet/minecraft/world/level/ChunkPos;ILjava/lang/Object;)V"))
