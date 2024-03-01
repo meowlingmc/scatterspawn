@@ -57,8 +57,8 @@ public class CircleScatterer implements Scatterer {
             else
                 distance = minimumLength;
 
-            x = Math.sin(angle * Math.PI / 360) * distance + originX;
-            z = Math.cos(angle * Math.PI / 360) * distance + originZ;
+            x = Math.sin(angle * (Math.PI*2) / 360) * distance + originX;
+            z = Math.cos(angle * (Math.PI*2) / 360) * distance + originZ;
 
             double minDist = Double.MAX_VALUE;
             for (Map.Entry<String, JsonElement> entry : playerConfigs.entrySet()) {
