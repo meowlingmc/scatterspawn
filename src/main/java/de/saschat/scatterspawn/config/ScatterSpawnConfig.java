@@ -84,7 +84,6 @@ public class ScatterSpawnConfig {
 
     public JsonObject getScattererPlayerConfigs() {
         scattererPlayerConfigPath = getPlayerPath();
-        dirty();
 
         if(scattererPlayerConfigsCache != null)
             return scattererPlayerConfigsCache;
@@ -98,6 +97,7 @@ public class ScatterSpawnConfig {
         } catch (Exception ex) {}
         if(scattererPlayerConfigsCache == null)
             scattererPlayerConfigsCache = new JsonObject();
+        dirty();
         return scattererPlayerConfigsCache;
     }
 
