@@ -72,7 +72,7 @@ public class ScatterSpawnConfig {
 
     @Expose
     private String scattererPlayerConfigPath;
-    private JsonObject scattererPlayerConfigsCache = new JsonObject();
+    private JsonObject scattererPlayerConfigsCache;
 
     public JsonObject getScattererConfig() {
         JsonObject ret;
