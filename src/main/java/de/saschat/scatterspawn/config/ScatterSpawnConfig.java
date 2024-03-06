@@ -24,6 +24,7 @@ public class ScatterSpawnConfig {
     private static final File FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), ScatterSpawn.MOD_ID + ".json");
 
     public void dirty() {
+        getScattererPlayerConfigs();
         try {
             FileWriter writer = new FileWriter(FILE);
             GSON.toJson(this, writer);
@@ -87,14 +88,14 @@ public class ScatterSpawnConfig {
 
         if(scattererPlayerConfigsCache != null)
             return scattererPlayerConfigsCache;
-        File readFile = new File(scattererPlayerConfigPath);
-        if(!readFile.exists())
-            return scattererPlayerConfigsCache;
-        try {
-            FileReader reader = new FileReader(FILE);
-            scattererPlayerConfigsCache = GSON.fromJson(reader, JsonObject.class);
-            reader.close();
-        } catch (Exception ex) {}
+        File readFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), scattererPlayerConfigPath);
+        if(readFile.exists()) {
+            try {
+                FileReader reader = new FileReader(readFile);
+                scattererPlayerConfigsCache = GSON.fromJson(reader, JsonObject.class);
+                reader.close();
+            } catch (Exception ex) {ex.printStackTrace();}
+        }
         if(scattererPlayerConfigsCache == null)
             scattererPlayerConfigsCache = new JsonObject();
         dirty();
